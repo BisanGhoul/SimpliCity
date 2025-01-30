@@ -1,4 +1,4 @@
-package com.jhf;
+package com.jhf.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -33,20 +33,20 @@ public class Group {
     private String groupPicUrl;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "group_owner_username", nullable = false)
-    private com.jhf.User groupOwnerUsername;
+    private User groupOwnerUsername;
 
     @Size(max = 50)
     @Column(name = "status", length = 50)
     private String status;
 
     @OneToMany(mappedBy = "group")
-    private Set<com.jhf.Post> posts = new LinkedHashSet<>();
+    private Set<Post> posts = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "group")
-    private Set<com.jhf.UserGroupRelation> userGroupRelations = new LinkedHashSet<>();
+    private Set<UserGroupRelation> userGroupRelations = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -80,11 +80,11 @@ public class Group {
         this.groupPicUrl = groupPicUrl;
     }
 
-    public com.jhf.User getGroupOwnerUsername() {
+    public User getGroupOwnerUsername() {
         return groupOwnerUsername;
     }
 
-    public void setGroupOwnerUsername(com.jhf.User groupOwnerUsername) {
+    public void setGroupOwnerUsername(User groupOwnerUsername) {
         this.groupOwnerUsername = groupOwnerUsername;
     }
 
@@ -96,19 +96,19 @@ public class Group {
         this.status = status;
     }
 
-    public Set<com.jhf.Post> getPosts() {
+    public Set<Post> getPosts() {
         return posts;
     }
 
-    public void setPosts(Set<com.jhf.Post> posts) {
+    public void setPosts(Set<Post> posts) {
         this.posts = posts;
     }
 
-    public Set<com.jhf.UserGroupRelation> getUserGroupRelations() {
+    public Set<UserGroupRelation> getUserGroupRelations() {
         return userGroupRelations;
     }
 
-    public void setUserGroupRelations(Set<com.jhf.UserGroupRelation> userGroupRelations) {
+    public void setUserGroupRelations(Set<UserGroupRelation> userGroupRelations) {
         this.userGroupRelations = userGroupRelations;
     }
 

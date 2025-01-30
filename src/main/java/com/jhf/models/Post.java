@@ -1,4 +1,4 @@
-package com.jhf;
+package com.jhf.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -35,7 +35,7 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "username", nullable = false)
-    private com.jhf.User username;
+    private User username;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
@@ -88,11 +88,11 @@ public class Post {
         this.picUrl = picUrl;
     }
 
-    public com.jhf.User getUsername() {
+    public User getUsername() {
         return username;
     }
 
-    public void setUsername(com.jhf.User username) {
+    public void setUsername(User username) {
         this.username = username;
     }
 

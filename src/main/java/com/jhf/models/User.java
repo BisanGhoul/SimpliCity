@@ -1,18 +1,26 @@
-package com.jhf;
+package com.jhf.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jhf.dto.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "user", schema = "simplicity", uniqueConstraints = {
         @UniqueConstraint(name = "email", columnNames = {"email"})
 })
-public class User {
+public class User implements UserDetails {
     @Id
     @Size(max = 255)
     @Column(name = "username", nullable = false)
@@ -54,6 +62,13 @@ public class User {
     @Column(name = "bio", length = 500)
     private String bio;
 
+    @NotNull
+//    @JsonIgnore
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("'USER'")
+    @Column(name = "role", nullable = false)
+    private Role role = Role.USER;
+
     @OneToMany(mappedBy = "username")
     private Set<Comment> comments = new LinkedHashSet<>();
 
@@ -67,10 +82,18 @@ public class User {
     private Set<Post> posts = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "username")
-    private Set<com.jhf.UserGroupRelation> userGroupRelations = new LinkedHashSet<>();
+    private Set<UserGroupRelation> userGroupRelations = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "firstUsername")
-    private Set<com.jhf.UserRelationship> userRelationships = new LinkedHashSet<>();
+    private Set<UserRelationship> userRelationships = new LinkedHashSet<>();
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public String getUsername() {
         return username;
@@ -176,20 +199,45 @@ public class User {
         this.posts = posts;
     }
 
-    public Set<com.jhf.UserGroupRelation> getUserGroupRelations() {
+    public Set<UserGroupRelation> getUserGroupRelations() {
         return userGroupRelations;
     }
 
-    public void setUserGroupRelations(Set<com.jhf.UserGroupRelation> userGroupRelations) {
+    public void setUserGroupRelations(Set<UserGroupRelation> userGroupRelations) {
         this.userGroupRelations = userGroupRelations;
     }
 
-    public Set<com.jhf.UserRelationship> getUserRelationships() {
+    public Set<UserRelationship> getUserRelationships() {
         return userRelationships;
     }
 
-    public void setUserRelationships(Set<com.jhf.UserRelationship> userRelationships) {
+    public void setUserRelationships(Set<UserRelationship> userRelationships) {
         this.userRelationships = userRelationships;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + getRole().toString()));
     }
 
 }

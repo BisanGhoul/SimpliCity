@@ -1,4 +1,4 @@
-package com.jhf;
+package com.jhf.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -44,7 +44,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "username", nullable = false)
-    private com.jhf.User username;
+    private User username;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -55,7 +55,7 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "post_id", nullable = false)
-    private com.jhf.Post post;
+    private Post post;
 
     @OneToMany(mappedBy = "parentComment")
     private Set<Comment> comments = new LinkedHashSet<>();
@@ -100,11 +100,11 @@ public class Comment {
         this.updatedAt = updatedAt;
     }
 
-    public com.jhf.User getUsername() {
+    public User getUsername() {
         return username;
     }
 
-    public void setUsername(com.jhf.User username) {
+    public void setUsername(User username) {
         this.username = username;
     }
 
@@ -116,11 +116,11 @@ public class Comment {
         this.parentComment = parentComment;
     }
 
-    public com.jhf.Post getPost() {
+    public Post getPost() {
         return post;
     }
 
-    public void setPost(com.jhf.Post post) {
+    public void setPost(Post post) {
         this.post = post;
     }
 
